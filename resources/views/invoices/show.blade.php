@@ -24,8 +24,19 @@
                     <!-- Invoice Header -->
                     <div class="flex justify-between items-start border-b border-gray-200 dark:border-gray-700 pb-8 mb-8">
                         <div>
+                            @php
+                                $logo = \App\Models\Setting::get('invoice_logo') ?? \App\Models\Setting::get('branding_logo');
+                            @endphp
+                            @if($logo)
+                                <img src="{{ asset('storage/' . $logo) }}" alt="Company Logo" class="h-16 object-contain mb-4">
+                            @else
+                                <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">INVOICE</h1>
+                            @endif
+
                             <div class="flex items-center gap-3 mb-2">
-                                <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">INVOICE</h1>
+                                @if($logo)
+                                    <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">INVOICE</h1>
+                                @endif
                                 <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full 
                                     @if($invoice->status === 'paid') bg-green-100 text-green-800 border border-green-200
                                     @elseif($invoice->status === 'overdue') bg-red-100 text-red-800 border border-red-200
@@ -35,18 +46,13 @@
                                 </span>
                             </div>
                             <p class="text-gray-500 dark:text-gray-400 font-medium">#INV-{{ str_pad($invoice->id, 5, '0', STR_PAD_LEFT) }}</p>
-                            @if($invoice->project)
-                                <p class="text-indigo-600 dark:text-indigo-400 font-medium mt-1 text-sm">
-                                    Project: {{ $invoice->project->name }}
-                                </p>
-                            @endif
                         </div>
                         <div class="text-right">
-                            <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">Bayan Pro</h2>
+                            <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ \App\Models\Setting::get('company_name', 'Bayan Pro') }}</h2>
                             <div class="text-gray-500 dark:text-gray-400 text-sm mt-1 space-y-1">
-                                <p>123 Tech Street</p>
-                                <p>Innovation City, 12345</p>
-                                <p>support@bayanpro.com</p>
+                                <p class="whitespace-pre-line">{{ \App\Models\Setting::get('company_address') }}</p>
+                                <p>{{ \App\Models\Setting::get('company_email') }}</p>
+                                <p>{{ \App\Models\Setting::get('company_phone') }}</p>
                             </div>
                         </div>
                     </div>

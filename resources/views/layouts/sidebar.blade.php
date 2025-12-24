@@ -1,8 +1,7 @@
 <div class="flex flex-col w-64 h-screen px-4 py-8 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 transition-colors duration-300">
-    <div class="flex items-center justify-center mb-10">
-        <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 group">
-            <x-application-logo class="w-10 h-10 fill-current text-blue-600 transition-transform duration-300 group-hover:scale-110" />
-            <span class="text-2xl font-bold text-gray-800 dark:text-white tracking-tight">Bayan Pro</span>
+    <div class="flex items-center justify-center mb-10 px-4">
+        <a href="{{ route('dashboard') }}" class="flex items-center justify-center group w-full">
+            <x-application-logo class="max-h-16 w-auto max-w-full fill-current text-blue-600 transition-transform duration-300 group-hover:scale-105" />
         </a>
     </div>
 

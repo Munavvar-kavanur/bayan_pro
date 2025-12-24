@@ -12,6 +12,12 @@
                  <!-- Header Info -->
                  <div class="flex justify-between items-start mb-8 border-b border-gray-200 dark:border-gray-700 pb-6">
                     <div>
+                        @php
+                            $logo = \App\Models\Setting::get('quotation_logo') ?? \App\Models\Setting::get('branding_logo');
+                        @endphp
+                        @if($logo)
+                            <img src="{{ asset('storage/' . $logo) }}" alt="Company Logo" class="h-16 object-contain mb-4">
+                        @endif
                          <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Quotation</h1>
                          <span class="px-3 py-1 text-sm font-semibold rounded-full 
                             @if($quotation->status === 'accepted') bg-green-100 text-green-800 
@@ -20,11 +26,19 @@
                             @else bg-gray-100 text-gray-800 @endif">
                             {{ ucfirst($quotation->status) }}
                         </span>
+                        
+                        <!-- Company Info -->
+                        <div class="mt-4 text-sm text-gray-500 dark:text-gray-400">
+                             <p class="font-bold text-gray-900 dark:text-white">{{ \App\Models\Setting::get('company_name', 'Bayan Pro') }}</p>
+                             <p class="whitespace-pre-line">{{ \App\Models\Setting::get('company_address') }}</p>
+                             <p>{{ \App\Models\Setting::get('company_email') }}</p>
+                        </div>
                     </div>
                     <div class="text-right">
                         <p class="text-gray-500 dark:text-gray-400 text-sm">Issued To:</p>
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $quotation->client->company_name ?? $quotation->client->name }}</h3>
                         <p class="text-gray-500 dark:text-gray-400 text-sm">{{ $quotation->client->email }}</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm whitespace-pre-line">{{ $quotation->client->address }}</p>
                     </div>
                  </div>
 

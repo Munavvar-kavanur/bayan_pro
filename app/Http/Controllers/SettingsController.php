@@ -20,11 +20,26 @@ class SettingsController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->except(['_token', '_method', 'tab']);
+        // 1. Handle Generic Inputs
+        $data = $request->except(['_token', '_method', 'tab', 'branding_logo', 'invoice_logo', 'quotation_logo']);
         $group = $request->input('tab', 'general');
 
         foreach ($data as $key => $value) {
             Setting::set($key, $value, $group);
+        }
+
+        // 2. Handle Logo Uploads
+        $logos = ['branding_logo', 'invoice_logo', 'quotation_logo'];
+
+        foreach ($logos as $logoField) {
+            if ($request->hasFile($logoField)) {
+                $request->validate([
+                    $logoField => 'image|mimes:jpeg,png,jpg,webp|max:2048', // Max 2MB
+                ]);
+
+                $path = $request->file($logoField)->store('uploads/branding', 'public');
+                Setting::set($logoField, $path, 'branding');
+            }
         }
 
         return redirect()->route('settings.index', ['tab' => $group])
