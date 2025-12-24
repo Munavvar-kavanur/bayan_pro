@@ -1,13 +1,6 @@
 <header class="sticky top-0 z-30 flex items-center justify-between px-6 py-4 bg-white/80 border-b border-gray-200 backdrop-blur-md dark:bg-gray-800/90 dark:border-gray-700 transition-colors duration-300">
-    <div class="flex items-center">
-        <div class="relative mx-4 lg:mx-0 group">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <svg class="w-5 h-5 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-200" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>
-            <input class="w-32 pl-10 pr-4 py-2 text-sm text-gray-600 bg-gray-100 border-none rounded-full focus:bg-white focus:ring-2 focus:ring-blue-500 placeholder-gray-400 sm:w-64 dark:bg-gray-700 dark:text-gray-200 dark:focus:bg-gray-600 transition-all duration-200" type="text" placeholder="Search...">
-        </div>
+    <div class="flex items-center flex-1 max-w-lg">
+        <livewire:global-search />
     </div>
 
     <div class="flex items-center space-x-4">
