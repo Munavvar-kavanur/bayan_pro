@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ 
+          darkMode: localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches) 
+      }" x-init="$watch('darkMode', val => {
+          localStorage.setItem('theme', val ? 'dark' : 'light');
+          val ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');
+      }); if(darkMode) document.documentElement.classList.add('dark');" :class="{ 'dark': darkMode }">
 
 <head>
     <meta charset="utf-8">
@@ -21,22 +26,39 @@
             font-family: 'Outfit', sans-serif;
         }
 
+        /* Light Mode Defaults */
         .glass {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            /* slate-200 */
         }
 
         .glass-sidebar {
-            background: rgba(15, 23, 42, 0.6);
-            /* Slate-900 with opacity */
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(12px);
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(226, 232, 240, 0.8);
         }
 
         .glass-header {
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        /* Dark Mode Overrides */
+        .dark .glass {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dark .glass-sidebar {
+            background: rgba(15, 23, 42, 0.6);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .dark .glass-header {
+            background: rgba(15, 23, 42, 0.6);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -53,24 +75,40 @@
         }
 
         ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            /* slate-100 */
+        }
+
+        .dark ::-webkit-scrollbar-track {
             background: #020617;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #334155;
+            background: #cbd5e1;
+            /* slate-300 */
             border-radius: 4px;
         }
 
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+
         ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+            /* slate-400 */
+        }
+
+        .dark ::-webkit-scrollbar-thumb:hover {
             background: #475569;
         }
     </style>
 </head>
 
-<body class="font-sans antialiased bg-slate-950 text-slate-100">
+<body
+    class="font-sans antialiased bg-gray-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
 
-    <!-- Background Decoration -->
-    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <!-- Background Decoration (Dark Mode Only) -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden hidden dark:block">
         <div class="absolute top-0 left-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl opacity-30 mix-blend-screen">
         </div>
         <div
