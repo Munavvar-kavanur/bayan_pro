@@ -1,52 +1,62 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-2xl text-white leading-tight">
             {{ __('Edit Client') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <form action="{{ route('clients.update', $client) }}" method="POST">
+            <div class="glass overflow-hidden rounded-xl">
+                <div class="p-6 text-slate-100">
+                    <form action="{{ route('clients.update', $client) }}" method="POST"
+                        class="max-w-2xl mx-auto space-y-6">
                         @csrf
                         @method('PUT')
-                        <div class="mb-4">
-                            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>
-                            <input type="text" name="name" id="name" value="{{ old('name', $client->name) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-                            @error('name') <span class="text-red-500 text-xs italic">{{ $message }}</span> @enderror
+                        <div>
+                            <x-input-label for="name" :value="__('Name')" />
+                            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
+                                :value="old('name', $client->name)" required autofocus />
+                            <x-input-error class="mt-2" :messages="$errors->get('name')" />
                         </div>
 
-                        <div class="mb-4">
-                            <label for="company_name" class="block text-gray-700 text-sm font-bold mb-2">Company Name:</label>
-                            <input type="text" name="company_name" id="company_name" value="{{ old('company_name', $client->company_name) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                            @error('company_name') <span class="text-red-500 text-xs italic">{{ $message }}</span> @enderror
+                        <div>
+                            <x-input-label for="company_name" :value="__('Company Name')" />
+                            <x-text-input id="company_name" name="company_name" type="text" class="mt-1 block w-full"
+                                :value="old('company_name', $client->company_name)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('company_name')" />
                         </div>
 
-                        <div class="mb-4">
-                            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
-                            <input type="email" name="email" id="email" value="{{ old('email', $client->email) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                            @error('email') <span class="text-red-500 text-xs italic">{{ $message }}</span> @enderror
+                        <div>
+                            <x-input-label for="email" :value="__('Email')" />
+                            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full"
+                                :value="old('email', $client->email)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('email')" />
                         </div>
 
-                        <div class="mb-4">
-                            <label for="phone" class="block text-gray-700 text-sm font-bold mb-2">Phone:</label>
-                            <input type="text" name="phone" id="phone" value="{{ old('phone', $client->phone) }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <div>
+                            <x-input-label for="phone" :value="__('Phone')" />
+                            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full"
+                                :value="old('phone', $client->phone)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
                         </div>
 
-                        <div class="mb-4">
-                            <label for="address" class="block text-gray-700 text-sm font-bold mb-2">Address:</label>
-                            <textarea name="address" id="address" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ old('address', $client->address) }}</textarea>
+                        <div>
+                            <x-input-label for="address" :value="__('Address')" />
+                            <textarea id="address" name="address"
+                                class="mt-1 block w-full rounded-lg bg-slate-900/50 border-white/10 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 placeholder-slate-500"
+                                rows="3">{{ old('address', $client->address) }}</textarea>
+                            <x-input-error class="mt-2" :messages="$errors->get('address')" />
                         </div>
 
-                        <div class="flex items-center justify-between">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                                Update Client
-                            </button>
-                            <a href="{{ route('clients.index') }}" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
-                                Cancel
+                        <div class="flex items-center justify-end gap-4">
+                            <a href="{{ route('clients.index') }}"
+                                class="text-sm text-slate-400 hover:text-white transition-colors">
+                                {{ __('Cancel') }}
                             </a>
+                            <x-primary-button>
+                                {{ __('Update Client') }}
+                            </x-primary-button>
                         </div>
                     </form>
                 </div>
