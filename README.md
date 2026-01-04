@@ -74,6 +74,17 @@ Follow these steps to set up the project on your local machine or production ser
     php artisan migrate
     ```
 
+5.  **Seed the Database**
+    Populate the database with demo data and the default admin user.
+    ```bash
+    php artisan db:seed
+    ```
+
+### Default Admin Credentials
+- **Email:** `admin@example.com`
+- **Password:** `password`
+
+
 ### Post-Deployment & Permissions (Critical)
 
 After deploying the code, you **must** run the following commands to ensure the application allows file uploads and logging correctly:
