@@ -1,13 +1,15 @@
-# SkyRoute Travel Platform
+# Bayan Pro
 
 ## Project Overview
 
-SkyRoute Travel Platform is a full-stack web application built with **Laravel 12** and **Livewire**. The platform is designed to facilitate flight ticket bookings to major Gulf destinations, including the UAE, Qatar, Saudi Arabia, Oman, Bahrain, and Kuwait. It features a customer-facing frontend for searching and booking flights, as well as a robust admin panel for managing bookings, finances (income/expenses/invoices), and users.
+Bayan Pro is a comprehensive **Client & Project Management System** built with **Laravel 12**. It is designed to streamline business operations by managing clients, projects, tasks, financial documents (invoices & quotations), and system settings.
 
 **Key Features:**
-- **Frontend:** Flight search, destination-specific SEO pages, and booking inquiry forms.
-- **Admin Panel:** Comprehensive dashboard for managing bookings, tracking revenue and expenses, and generating invoices.
-- **Tech Stack:** Laravel 12, Livewire 3, Tailwind CSS, Alpine.js, SQLite/MySQL.
+- **Client Management:** Manage client details and relationships.
+- **Project & Task Tracking:** Organize work into projects and track progress via tasks.
+- **Financial Management:** Create and manage Invoices and Quotations.
+- **Admin Dashboard:** Centralized control for all business operations.
+- **Tech Stack:** Laravel 12, Tailwind CSS, Alpine.js, SQLite/MySQL.
 
 ## Deployment Guide
 
@@ -45,7 +47,7 @@ Follow these steps to set up the project on your local machine or production ser
     **Required `.env` Values:**
     Ensure the following variables are set correctly in your `.env` file:
     ```ini
-    APP_NAME="SkyRoute"
+    APP_NAME="BayanPro"
     APP_ENV=production  # Use 'local' for development
     APP_URL=https://your-domain.com
 
@@ -53,7 +55,7 @@ Follow these steps to set up the project on your local machine or production ser
     DB_CONNECTION=mysql # or sqlite
     DB_HOST=127.0.0.1
     DB_PORT=3306
-    DB_DATABASE=your_database_name
+    DB_DATABASE=bayan_pro
     DB_USERNAME=your_database_user
     DB_PASSWORD=your_database_password
 
@@ -64,7 +66,7 @@ Follow these steps to set up the project on your local machine or production ser
     MAIL_USERNAME=null
     MAIL_PASSWORD=null
     MAIL_ENCRYPTION=null
-    MAIL_FROM_ADDRESS="info@skyroute.com"
+    MAIL_FROM_ADDRESS="info@bayanpro.com"
     MAIL_FROM_NAME="${APP_NAME}"
     ```
 
