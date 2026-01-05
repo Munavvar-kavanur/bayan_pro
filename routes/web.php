@@ -7,9 +7,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -17,7 +17,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('clients', \App\Http\Controllers\ClientController::class);
     Route::resource('projects', \App\Http\Controllers\ProjectController::class);
-    Route::resource('tasks', \App\Http\Controllers\TaskController::class);
+    // Route::resource('tasks', \App\Http\Controllers\TaskController::class);
     Route::resource('invoices', \App\Http\Controllers\InvoiceController::class);
     Route::resource('quotations', \App\Http\Controllers\QuotationController::class);
 
@@ -26,4 +26,4 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings', [\App\Http\Controllers\SettingsController::class, 'update'])->name('settings.update');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
