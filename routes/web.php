@@ -18,6 +18,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('clients', \App\Http\Controllers\ClientController::class);
     Route::resource('projects', \App\Http\Controllers\ProjectController::class);
     // Route::resource('tasks', \App\Http\Controllers\TaskController::class);
+    Route::get('invoices/{invoice}/download', [\App\Http\Controllers\InvoiceController::class, 'download'])->name('invoices.download');
+    Route::get('invoices/{invoice}/preview', [\App\Http\Controllers\InvoiceController::class, 'preview'])->name('invoices.preview');
     Route::resource('invoices', \App\Http\Controllers\InvoiceController::class);
     Route::resource('quotations', \App\Http\Controllers\QuotationController::class);
 

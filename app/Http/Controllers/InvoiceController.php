@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Invoice;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -11,7 +12,7 @@ class InvoiceController extends Controller
     public function index()
     {
         $invoices = Invoice::with('client')->latest()->paginate(10);
-        
+
         // Summary Stats
         $totalInvoices = Invoice::count();
         $totalAmount = Invoice::sum('total_amount');
@@ -51,5 +52,18 @@ class InvoiceController extends Controller
     {
         $invoice->delete();
         return redirect()->route('invoices.index')->with('success', 'Invoice deleted successfully.');
+    }
+
+    public function download(Invoice $invoice)
+    {
+        $invoice->load('client', 'items');
+        $pdf = Pdf::loadView('invoices.pdf', compact('invoice'));
+        return $pdf->download('Invoice-' . str_pad($invoice->id, 5, '0', STR_PAD_LEFT) . '.pdf');
+    }
+
+    public function preview(Invoice $invoice)
+    {
+        $invoice->load('client', 'items');
+        return view('invoices.partials.invoice-template', compact('invoice'));
     }
 }

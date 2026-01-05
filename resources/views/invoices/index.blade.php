@@ -183,31 +183,40 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold
-                                                @if($invoice->status === 'paid') bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20
-                                                @elseif($invoice->status === 'overdue') bg-rose-100 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20
-                                                @elseif($invoice->status === 'sent') bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20
-                                                @else bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 @endif
-                                            ">
+                                                    @if($invoice->status === 'paid') bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20
+                                                    @elseif($invoice->status === 'overdue') bg-rose-100 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20
+                                                    @elseif($invoice->status === 'sent') bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20
+                                                    @else bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 @endif
+                                                ">
                                             <span class="w-1.5 h-1.5 rounded-full mr-1.5 
-                                                    @if($invoice->status === 'paid') bg-emerald-500 
-                                                    @elseif($invoice->status === 'overdue') bg-rose-500
-                                                    @elseif($invoice->status === 'sent') bg-blue-500
-                                                    @else bg-slate-500 @endif
-                                                "></span>
+                                                        @if($invoice->status === 'paid') bg-emerald-500 
+                                                        @elseif($invoice->status === 'overdue') bg-rose-500
+                                                        @elseif($invoice->status === 'sent') bg-blue-500
+                                                        @else bg-slate-500 @endif
+                                                    "></span>
                                             {{ ucfirst($invoice->status) }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
                                         <div
                                             class="opacity-0 group-hover:opacity-100 transition-opacity flex justify-end items-center gap-2">
-                                            <a href="{{ route('invoices.show', $invoice) }}"
+                                            <button x-data
+                                                @click="$dispatch('load-invoice-preview', { url: '{{ route('invoices.preview', $invoice) }}' }); $dispatch('open-modal', 'invoice-preview-modal')"
                                                 class="p-1.5 hover:bg-slate-100 dark:hover:bg-white/10 rounded-lg text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-                                                title="View">
+                                                title="Preview">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                            </button>
+                                            <a href="{{ route('invoices.download', $invoice) }}"
+                                                class="p-1.5 hover:bg-slate-100 dark:hover:bg-white/10 rounded-lg text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                                                title="Download PDF">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                 </svg>
                                             </a>
                                             <a href="{{ route('invoices.edit', $invoice) }}"
@@ -272,4 +281,40 @@
             </div>
         </div>
     </div>
+
+    <!-- Preview Modal -->
+    <x-modal name="invoice-preview-modal" maxWidth="4xl">
+        <div x-data="{
+            content: 'Loading...',
+            init() {
+                window.addEventListener('load-invoice-preview', event => {
+                    this.content = '<div class=\'p-12 text-center text-slate-400\'><svg class=\'animate-spin h-8 w-8 mx-auto mb-4 text-indigo-500\' xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\'><circle class=\'opacity-25\' cx=\'12\' cy=\'12\' r=\'10\' stroke=\'currentColor\' stroke-width=\'4\'></circle><path class=\'opacity-75\' fill=\'currentColor\' d=\'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z\'></path></svg>Loading Invoice...</div>';
+                    fetch(event.detail.url)
+                        .then(response => response.text())
+                        .then(html => {
+                            this.content = html;
+                        })
+                        .catch(() => {
+                            this.content = '<div class=\'text-rose-500 p-10 text-center\'>Error loading invoice.</div>';
+                        });
+                });
+            }
+        }">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium text-slate-900 dark:text-white">Invoice Preview</h3>
+                    <button @click="$dispatch('close-modal', 'invoice-preview-modal')"
+                        class="text-slate-400 hover:text-slate-500 dark:hover:text-slate-300">
+                        <span class="sr-only">Close</span>
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <!-- Invoice Content Container -->
+                <div x-html="content" class="bg-slate-800 rounded-xl overflow-hidden border border-white/10"></div>
+            </div>
+        </div>
+    </x-modal>
 </x-app-layout>
