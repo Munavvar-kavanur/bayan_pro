@@ -60,8 +60,6 @@ class InvoiceForm extends Component
             $this->discount_type = $invoice->discount_type;
             $this->discount_value = $invoice->discount_value;
 
-            $this->loadProjects();
-
             foreach ($invoice->items as $item) {
                 $this->items[] = [
                     'title' => $item->title,
