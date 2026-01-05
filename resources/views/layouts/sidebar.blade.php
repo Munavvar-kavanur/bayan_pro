@@ -26,8 +26,8 @@
             @foreach ($navLinks as $link)
                     <a href="{{ route($link['route']) }}"
                         class="flex items-center px-4 py-3 transition-all duration-200 transform rounded-lg group
-                                          {{ $link['active']
-                ? 'bg-indigo-50 dark:bg-gradient-to-r dark:from-indigo-500/20 dark:to-purple-500/20 border-l-2 border-indigo-500 text-indigo-700 dark:text-white shadow-sm dark:shadow-indigo-500/10'
+                                                  {{ $link['active']
+                ? 'bg-indigo-50 dark:bg-transparent dark:bg-gradient-to-r dark:from-indigo-500/20 dark:to-purple-500/20 border-l-2 border-indigo-500 text-indigo-700 dark:text-white shadow-sm dark:shadow-indigo-500/10'
                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-indigo-600 dark:hover:text-white' }}">
                         <svg class="w-5 h-5 transition-colors duration-200 {{ $link['active'] ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-500 group-hover:text-indigo-500 dark:group-hover:text-slate-300' }}"
                             viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
