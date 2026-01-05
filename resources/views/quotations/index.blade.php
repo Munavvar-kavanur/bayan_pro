@@ -48,14 +48,15 @@
                                         </td>
                                         <td
                                             class="px-6 py-4 whitespace-nowrap text-sm text-slate-800 dark:text-white font-bold">
-                                            ${{ number_format($quotation->total_amount, 2) }}</td>
+                                            {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($quotation->total_amount, 2) }}
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span
                                                 class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                        @if($quotation->status === 'accepted') bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20
-                                                        @elseif($quotation->status === 'sent') bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20
-                                                        @elseif($quotation->status === 'rejected') bg-rose-100 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20
-                                                        @else bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 @endif">
+                                                            @if($quotation->status === 'accepted') bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20
+                                                            @elseif($quotation->status === 'sent') bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20
+                                                            @elseif($quotation->status === 'rejected') bg-rose-100 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20
+                                                            @else bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 @endif">
                                                 {{ ucfirst($quotation->status) }}
                                             </span>
                                         </td>

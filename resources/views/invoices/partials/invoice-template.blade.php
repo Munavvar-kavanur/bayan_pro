@@ -115,9 +115,11 @@
                                 {{ $item->quantity }}
                             </td>
                             <td class="px-6 py-4 text-right text-sm text-slate-300 print:text-gray-600">
-                                ${{ number_format($item->unit_price, 2) }}</td>
+                                {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($item->unit_price, 2) }}
+                            </td>
                             <td class="px-6 py-4 text-right text-sm font-semibold text-white print:text-black">
-                                ${{ number_format($item->amount, 2) }}</td>
+                                {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($item->amount, 2) }}
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -142,28 +144,30 @@
 
             <div class="flex justify-between text-sm">
                 <span class="text-slate-400 print:text-gray-600">Subtotal</span>
-                <span class="font-medium text-slate-100 print:text-black">${{ number_format($subtotal, 2) }}</span>
+                <span
+                    class="font-medium text-slate-100 print:text-black">{{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($subtotal, 2) }}</span>
             </div>
 
             @if($discountAmount > 0)
                 <div class="flex justify-between text-sm text-emerald-400 print:text-green-600">
                     <span>Discount <span
                             class="text-xs">({{ $invoice->discount_type === 'percent' ? $invoice->discount_value . '%' : 'Fixed' }})</span></span>
-                    <span>- ${{ number_format($discountAmount, 2) }}</span>
+                    <span>-
+                        {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($discountAmount, 2) }}</span>
                 </div>
             @endif
 
             @if($taxAmount > 0)
                 <div class="flex justify-between text-sm text-slate-400 print:text-gray-600">
                     <span>Tax <span class="text-xs">({{ $invoice->tax_rate }}%)</span></span>
-                    <span>${{ number_format($taxAmount, 2) }}</span>
+                    <span>{{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($taxAmount, 2) }}</span>
                 </div>
             @endif
 
             <div class="border-t border-white/10 print:border-gray-200 pt-3 pb-3 flex justify-between items-center">
                 <span class="text-base font-bold text-white print:text-black">Total</span>
                 <span
-                    class="text-2xl font-bold text-indigo-400 print:text-indigo-600">${{ number_format($invoice->total_amount, 2) }}</span>
+                    class="text-2xl font-bold text-indigo-400 print:text-indigo-600">{{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($invoice->total_amount, 2) }}</span>
             </div>
         </div>
     </div>

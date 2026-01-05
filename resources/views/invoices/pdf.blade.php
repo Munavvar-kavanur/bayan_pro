@@ -184,8 +184,10 @@
                         @endif
                     </td>
                     <td class="text-right">{{ $item->quantity }}</td>
-                    <td class="text-right">${{ number_format($item->unit_price, 2) }}</td>
-                    <td class="text-right">${{ number_format($item->amount, 2) }}</td>
+                    <td class="text-right">
+                        {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($item->unit_price, 2) }}</td>
+                    <td class="text-right">
+                        {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($item->amount, 2) }}</td>
                 </tr>
             @endforeach
         </table>
@@ -206,28 +208,33 @@
 
                 <tr>
                     <td>Subtotal</td>
-                    <td class="text-right">${{ number_format($subtotal, 2) }}</td>
+                    <td class="text-right">
+                        {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($subtotal, 2) }}</td>
                 </tr>
 
                 @if($discountAmount > 0)
                     <tr style="color: #10b981;">
                         <td>Discount
                             ({{ $invoice->discount_type === 'percent' ? $invoice->discount_value . '%' : 'Fixed' }})</td>
-                        <td class="text-right">- ${{ number_format($discountAmount, 2) }}</td>
+                        <td class="text-right">-
+                            {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($discountAmount, 2) }}
+                        </td>
                     </tr>
                 @endif
 
                 @if($taxAmount > 0)
                     <tr>
                         <td>Tax ({{ $invoice->tax_rate }}%)</td>
-                        <td class="text-right">${{ number_format($taxAmount, 2) }}</td>
+                        <td class="text-right">
+                            {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($taxAmount, 2) }}</td>
                     </tr>
                 @endif
 
                 <tr style="border-top: 2px solid #333; font-weight: bold; font-size: 16px;">
                     <td style="padding-top: 10px;">Total</td>
                     <td class="text-right" style="padding-top: 10px; color: #6366f1;">
-                        ${{ number_format($invoice->total_amount, 2) }}</td>
+                        {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($invoice->total_amount, 2) }}
+                    </td>
                 </tr>
             </table>
         </div>

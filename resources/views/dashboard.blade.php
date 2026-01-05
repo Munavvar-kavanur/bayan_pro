@@ -60,7 +60,7 @@
                         <div class="text-slate-500 dark:text-slate-400 text-sm font-bold uppercase tracking-wider mb-1">
                             Paid Revenue</div>
                         <div class="text-3xl font-bold text-slate-800 dark:text-white">
-                            ${{ number_format($paidInvoicesAmount, 2) }}</div>
+                            {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($paidInvoicesAmount, 2) }}</div>
                         <div class="mt-2 text-xs text-blue-600 dark:text-blue-400 font-medium">
                             {{ $pendingInvoicesCount }} pending invoices
                         </div>
@@ -127,7 +127,7 @@
                                         </td>
                                         <td class="py-3 text-right">
                                             <div class="font-bold text-slate-800 dark:text-white">
-                                                ${{ number_format($invoice->total_amount, 2) }}</div>
+                                                {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($invoice->total_amount, 2) }}</div>
                                         </td>
                                         <td class="py-3 text-right pr-2">
                                             <span
@@ -178,6 +178,8 @@
             document.addEventListener('DOMContentLoaded', function () {
                 const ctx = document.getElementById('incomeChart').getContext('2d');
 
+                const currencySymbol = "{{ \App\Models\Setting::get('currency_symbol', '$') }}";
+                
                 // Check current theme
                 const isDark = document.documentElement.classList.contains('dark');
                 const textColor = isDark ? '#cbd5e1' : '#475569';
@@ -221,7 +223,20 @@
                                 borderWidth: 1,
                                 padding: 10,
                                 titleFont: { family: 'Outfit', size: 13 },
-                                bodyFont: { family: 'Outfit', size: 13 }
+                                bodyFont: { family: 'Outfit', size: 13 },
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += currencySymbol + context.parsed.y;
+                                        }
+                                        return label;
+                                    }
+                                }
                             }
                         },
                         scales: {
@@ -234,7 +249,7 @@
                                 ticks: {
                                     color: textColor,
                                     font: { family: 'Outfit' },
-                                    callback: function (value) { return '$' + value; }
+                                    callback: function (value) { return currencySymbol + value; }
                                 }
                             }
                         },

@@ -26,7 +26,8 @@
                             <p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                 Total Volume</p>
                             <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-1">
-                                ${{ number_format($totalAmount, 2) }}</h3>
+                                {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($totalAmount, 2) }}
+                            </h3>
                         </div>
                         <div
                             class="p-2 bg-indigo-100 dark:bg-indigo-500/10 rounded-lg text-indigo-600 dark:text-indigo-400">
@@ -45,7 +46,8 @@
                             <p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                 Paid</p>
                             <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-1">
-                                ${{ number_format($totalPaid, 2) }}</h3>
+                                {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($totalPaid, 2) }}
+                            </h3>
                         </div>
                         <div
                             class="p-2 bg-emerald-100 dark:bg-emerald-500/10 rounded-lg text-emerald-600 dark:text-emerald-400">
@@ -64,7 +66,8 @@
                             <p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                 Overdue</p>
                             <h3 class="text-2xl font-bold text-slate-800 dark:text-white mt-1">
-                                ${{ number_format($totalOverdue, 2) }}</h3>
+                                {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($totalOverdue, 2) }}
+                            </h3>
                         </div>
                         <div class="p-2 bg-rose-100 dark:bg-rose-500/10 rounded-lg text-rose-600 dark:text-rose-400">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -179,21 +182,21 @@
                                     </td>
                                     <td
                                         class="px-6 py-4 whitespace-nowrap text-sm font-bold text-slate-800 dark:text-white">
-                                        ${{ number_format($invoice->total_amount, 2) }}
+                                        {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($invoice->total_amount, 2) }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold
-                                                    @if($invoice->status === 'paid') bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20
-                                                    @elseif($invoice->status === 'overdue') bg-rose-100 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20
-                                                    @elseif($invoice->status === 'sent') bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20
-                                                    @else bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 @endif
-                                                ">
+                                                        @if($invoice->status === 'paid') bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/20
+                                                        @elseif($invoice->status === 'overdue') bg-rose-100 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-500/20
+                                                        @elseif($invoice->status === 'sent') bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20
+                                                        @else bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 @endif
+                                                    ">
                                             <span class="w-1.5 h-1.5 rounded-full mr-1.5 
-                                                        @if($invoice->status === 'paid') bg-emerald-500 
-                                                        @elseif($invoice->status === 'overdue') bg-rose-500
-                                                        @elseif($invoice->status === 'sent') bg-blue-500
-                                                        @else bg-slate-500 @endif
-                                                    "></span>
+                                                            @if($invoice->status === 'paid') bg-emerald-500 
+                                                            @elseif($invoice->status === 'overdue') bg-rose-500
+                                                            @elseif($invoice->status === 'sent') bg-blue-500
+                                                            @else bg-slate-500 @endif
+                                                        "></span>
                                             {{ ucfirst($invoice->status) }}
                                         </span>
                                     </td>
