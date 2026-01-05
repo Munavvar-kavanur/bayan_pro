@@ -58,9 +58,10 @@ class QuotationForm extends Component
             $this->tax_rate = $quotation->tax_rate;
             $this->discount_type = $quotation->discount_type;
             $this->discount_value = $quotation->discount_value;
-            
+
             foreach ($quotation->items as $item) {
                 $this->items[] = [
+                    '_id' => uniqid(),
                     'title' => $item->title,
                     'description' => $item->description,
                     'quantity' => $item->quantity,
@@ -68,20 +69,27 @@ class QuotationForm extends Component
                 ];
             }
         } else {
-             // Pre-fill client if passed from query string
+            // Pre-fill client if passed from query string
             if ($client_id) {
                 $this->selectClient($client_id);
             }
 
             $this->issue_date = now()->format('Y-m-d');
             $this->expiry_date = now()->addDays(14)->format('Y-m-d');
-            $this->addItem(); 
+            $this->items[] = [
+                '_id' => uniqid(),
+                'title' => '',
+                'description' => '',
+                'quantity' => 1,
+                'unit_price' => 0,
+            ];
         }
     }
 
     public function addItem()
     {
         $this->items[] = [
+            '_id' => uniqid(),
             'title' => '',
             'description' => '',
             'quantity' => 1,
@@ -95,7 +103,7 @@ class QuotationForm extends Component
         $this->items = array_values($this->items);
     }
 
-     // --- SELECTION LOGIC (Mirrors InvoiceForm) ---
+    // --- SELECTION LOGIC (Mirrors InvoiceForm) ---
 
     public function updatedClientSearch()
     {
@@ -113,8 +121,8 @@ class QuotationForm extends Component
     {
         $this->client_id = $id;
         $client = Client::find($id);
-        if($client){
-             $this->client_search = $client->company_name ?? $client->name;
+        if ($client) {
+            $this->client_search = $client->company_name ?? $client->name;
         }
         $this->project_id = null;
         $this->project_search = '';
@@ -204,35 +212,32 @@ class QuotationForm extends Component
     {
         // 1. Client Search Logic
         $clientsQuery = Client::query();
-        
+
         if (!empty($this->client_search) && !$this->client_id) {
             $term = $this->client_search;
-            $clientsQuery->where(function($q) use ($term) {
+            $clientsQuery->where(function ($q) use ($term) {
                 $q->where('name', 'like', '%' . $term . '%')
-                  ->orWhere('company_name', 'like', '%' . $term . '%');
-            })->orderByRaw("CASE 
-                WHEN name LIKE ? THEN 1 
-                WHEN company_name LIKE ? THEN 2 
-                ELSE 3 END", ["{$term}%", "{$term}%"]);
+                    ->orWhere('company_name', 'like', '%' . $term . '%');
+            })->orderBy('name');
         } else {
             $clientsQuery->orderBy('name');
         }
-        
+
         $clients = $clientsQuery->take(50)->get();
 
         // 2. Project Search Logic
         $projects = [];
         if ($this->client_id) {
             $projectsQuery = \App\Models\Project::where('client_id', $this->client_id);
-            
+
             if (!empty($this->project_search) && !$this->project_id) {
-                 $term = $this->project_search;
-                 $projectsQuery->where('name', 'like', '%' . $term . '%')
-                 ->orderByRaw("CASE WHEN name LIKE ? THEN 1 ELSE 2 END", ["{$term}%"]);
+                $term = $this->project_search;
+                $projectsQuery->where('name', 'like', '%' . $term . '%')
+                    ->orderBy('name');
             } else {
                 $projectsQuery->orderBy('name');
             }
-            
+
             $projects = $projectsQuery->take(50)->get();
         }
 

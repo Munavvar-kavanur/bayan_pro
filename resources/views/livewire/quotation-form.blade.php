@@ -66,7 +66,7 @@
 
                                 @if(strlen($client_search) >= 1)
                                 <div class="absolute z-50 w-full mt-1 bg-slate-800 shadow-xl rounded-lg border border-white/10 max-h-60 overflow-y-auto">
-                                    <ul wire:key="client-list-{{ count($found_clients) }}">
+                                    <ul>
                                         @forelse($found_clients as $client)
                                             <li wire:key="client-row-{{ $client->id }}" class="border-b border-white/5 last:border-0">
                                                 <button 
@@ -140,7 +140,7 @@
                                 </div>
 
                                 <div x-show="open" style="display: none;" class="absolute z-50 w-full mt-1 bg-slate-800 shadow-xl rounded-lg border border-white/10 max-h-60 overflow-y-auto">
-                                    <ul wire:key="project-list-{{ count($found_projects) }}">
+                                    <ul>
                                         @forelse($found_projects as $project)
                                             <li wire:key="project-row-{{ $project->id }}" class="border-b border-white/5 last:border-0">
                                                 <button 
@@ -199,7 +199,7 @@
                         </thead>
                         <tbody class="divide-y divide-white/5">
                             @foreach($items as $index => $item)
-                            <tr wire:key="quotation-item-row-{{ $index }}" class="hover:bg-white/5 group transition-colors">
+                            <tr wire:key="quotation-item-row-{{ $item['_id'] }}" class="hover:bg-white/5 group transition-colors">
                                 <td class="px-6 py-4 text-center text-slate-500 text-xs">
                                     {{ $index + 1 }}
                                 </td>

@@ -59,7 +59,7 @@ class InvoiceForm extends Component
             $this->tax_rate = $invoice->tax_rate;
             $this->discount_type = $invoice->discount_type;
             $this->discount_value = $invoice->discount_value;
-            
+
             $this->loadProjects();
 
             foreach ($invoice->items as $item) {
@@ -73,7 +73,12 @@ class InvoiceForm extends Component
         } else {
             $this->issue_date = now()->format('Y-m-d');
             $this->due_date = now()->addDays(30)->format('Y-m-d');
-            $this->addItem(); 
+            $this->items[] = [
+                'title' => '',
+                'description' => '',
+                'quantity' => 1,
+                'unit_price' => 0,
+            ];
         }
     }
 
@@ -106,12 +111,12 @@ class InvoiceForm extends Component
         $this->client_id = $id;
         $client = Client::find($id);
         if ($client) {
-             $this->client_search = $client->company_name ?? $client->name;
-             \Illuminate\Support\Facades\Log::info("Client Found: " . $this->client_search);
+            $this->client_search = $client->company_name ?? $client->name;
+            \Illuminate\Support\Facades\Log::info("Client Found: " . $this->client_search);
         } else {
-             \Illuminate\Support\Facades\Log::error("Client NOT Found: " . $id);
+            \Illuminate\Support\Facades\Log::error("Client NOT Found: " . $id);
         }
-        
+
         // Reset project when client changes
         $this->project_id = null;
         $this->project_search = '';
@@ -185,7 +190,7 @@ class InvoiceForm extends Component
 
         if ($this->invoice) {
             $this->invoice->update($data);
-            $this->invoice->items()->delete(); 
+            $this->invoice->items()->delete();
         } else {
             $this->invoice = Invoice::create($data);
         }
@@ -207,36 +212,33 @@ class InvoiceForm extends Component
     {
         // 1. Client Search Logic
         $clientsQuery = Client::query();
-        
+
         if (!empty($this->client_search)) {
             $term = $this->client_search;
-            $clientsQuery->where(function($q) use ($term) {
+            $clientsQuery->where(function ($q) use ($term) {
                 $q->where('name', 'like', '%' . $term . '%')
-                  ->orWhere('company_name', 'like', '%' . $term . '%');
-            })->orderByRaw("CASE 
-                WHEN name LIKE ? THEN 1 
-                WHEN company_name LIKE ? THEN 2 
-                ELSE 3 END", ["{$term}%", "{$term}%"]);
+                    ->orWhere('company_name', 'like', '%' . $term . '%');
+            })->orderBy('name');
         } else {
             // Default: Show latest or alphabetical
             $clientsQuery->orderBy('name');
         }
-        
+
         $clients = $clientsQuery->take(50)->get();
 
         // 2. Project Search Logic
         $projects = [];
         if ($this->client_id) {
             $projectsQuery = \App\Models\Project::where('client_id', $this->client_id);
-            
+
             if (!empty($this->project_search)) {
-                 $term = $this->project_search;
-                 $projectsQuery->where('name', 'like', '%' . $term . '%')
-                 ->orderByRaw("CASE WHEN name LIKE ? THEN 1 ELSE 2 END", ["{$term}%"]);
+                $term = $this->project_search;
+                $projectsQuery->where('name', 'like', '%' . $term . '%')
+                    ->orderBy('name');
             } else {
                 $projectsQuery->orderBy('name');
             }
-            
+
             $projects = $projectsQuery->take(50)->get();
         }
 

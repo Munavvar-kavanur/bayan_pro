@@ -47,7 +47,7 @@
                             </div>
                         @else
                             <!-- Search State -->
-                            <div class="relative">
+                            <div class="relative" x-data="{ open: false }" @click.outside="open = false">
                                 <div class="relative">
                                     <input 
                                         type="text" 
@@ -55,6 +55,7 @@
                                         class="w-full rounded-lg bg-slate-900/50 border-white/10 text-white placeholder-slate-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm pl-4 py-2.5"
                                         placeholder="Search client..."
                                         autocomplete="off"
+                                        @focus="open = true"
                                     >
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                                         <svg class="h-4 w-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
@@ -65,8 +66,8 @@
                                     </div>
                                 </div>
 
-                                <div class="absolute z-50 w-full mt-1 bg-slate-800 shadow-xl rounded-lg border border-white/10 max-h-60 overflow-y-auto">
-                                    <ul wire:key="client-list-{{ count($found_clients) }}">
+                                <div x-show="open" style="display: none;" class="absolute z-50 w-full mt-1 bg-slate-800 shadow-xl rounded-lg border border-white/10 max-h-60 overflow-y-auto">
+                                    <ul>
                                         @forelse($found_clients as $client)
                                             <li wire:key="client-row-{{ $client->id }}" class="border-b border-white/5 last:border-0">
                                                 <button 
@@ -142,7 +143,7 @@
                                 </div>
 
                                 <div x-show="open" style="display: none;" class="absolute z-50 w-full mt-1 bg-slate-800 shadow-xl rounded-lg border border-white/10 max-h-60 overflow-y-auto">
-                                    <ul wire:key="project-list-{{ count($found_projects) }}">
+                                    <ul>
                                         @forelse($found_projects as $project)
                                             <li wire:key="project-row-{{ $project->id }}" class="border-b border-white/5 last:border-0">
                                                 <button 
