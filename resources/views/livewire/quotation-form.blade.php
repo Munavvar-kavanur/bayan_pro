@@ -21,7 +21,7 @@
         <div class="p-8 space-y-8 bg-transparent">
             
             <!-- Metadata Card -->
-            <div class="glass rounded-xl p-6">
+            <div class="glass rounded-xl p-6 relative z-20">
                  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                      
                     <!-- Client Selection -->
@@ -65,7 +65,7 @@
                                 </div>
 
                                 @if(strlen($client_search) >= 1)
-                                <div class="absolute z-10 w-full mt-1 bg-slate-800 shadow-xl rounded-lg border border-white/10 max-h-60 overflow-y-auto">
+                                <div class="absolute z-50 w-full mt-1 bg-slate-800 shadow-xl rounded-lg border border-white/10 max-h-60 overflow-y-auto">
                                     <ul wire:key="client-list-{{ count($found_clients) }}">
                                         @forelse($found_clients as $client)
                                             <li wire:key="client-row-{{ $client->id }}" class="border-b border-white/5 last:border-0">
@@ -139,7 +139,7 @@
                                     </div>
                                 </div>
 
-                                <div x-show="open" style="display: none;" class="absolute z-10 w-full mt-1 bg-slate-800 shadow-xl rounded-lg border border-white/10 max-h-60 overflow-y-auto">
+                                <div x-show="open" style="display: none;" class="absolute z-50 w-full mt-1 bg-slate-800 shadow-xl rounded-lg border border-white/10 max-h-60 overflow-y-auto">
                                     <ul wire:key="project-list-{{ count($found_projects) }}">
                                         @forelse($found_projects as $project)
                                             <li wire:key="project-row-{{ $project->id }}" class="border-b border-white/5 last:border-0">
@@ -170,21 +170,21 @@
                     <!-- Issue Date -->
                     <div>
                         <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Issue Date</label>
-                        <input type="date" wire:model="issue_date" class="w-full rounded-lg bg-slate-900/50 border-white/10 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
+                        <input type="date" wire:model="issue_date" style="color-scheme: dark;" class="w-full rounded-lg bg-slate-900/50 border-white/10 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
                         @error('issue_date') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
                     </div>
 
                     <!-- Expiry Date -->
                     <div>
                         <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Expiry Date</label>
-                        <input type="date" wire:model="expiry_date" class="w-full rounded-lg bg-slate-900/50 border-white/10 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
+                        <input type="date" wire:model="expiry_date" style="color-scheme: dark;" class="w-full rounded-lg bg-slate-900/50 border-white/10 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2.5">
                         @error('expiry_date') <p class="mt-1 text-xs text-rose-500">{{ $message }}</p> @enderror
                     </div>
                  </div>
             </div>
 
             <!-- Items Table -->
-            <div class="glass rounded-xl shadow-sm overflow-hidden">
+            <div class="glass rounded-xl shadow-sm overflow-hidden relative z-10">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-sm text-slate-400">
                         <thead class="bg-white/5 text-xs uppercase text-slate-300 font-semibold">
@@ -199,7 +199,7 @@
                         </thead>
                         <tbody class="divide-y divide-white/5">
                             @foreach($items as $index => $item)
-                            <tr class="hover:bg-white/5 group transition-colors">
+                            <tr wire:key="quotation-item-row-{{ $index }}" class="hover:bg-white/5 group transition-colors">
                                 <td class="px-6 py-4 text-center text-slate-500 text-xs">
                                     {{ $index + 1 }}
                                 </td>
@@ -209,16 +209,16 @@
                                     @error('items.'.$index.'.title') <p class="text-xs text-rose-500">{{ $message }}</p> @enderror
                                 </td>
                                 <td class="px-6 py-4 align-top">
-                                    <input type="number" wire:model.live="items.{{ $index }}.quantity" min="1" class="w-full text-right rounded-lg bg-slate-900/50 border-white/10 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-1">
+                                    <input type="number" wire:model.live="items.{{ $index }}.quantity" min="1" class="w-full text-right rounded-lg bg-white/5 border-white/10 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-1 placeholder-slate-500">
                                 </td>
                                 <td class="px-6 py-4 align-top">
                                     <div class="relative">
-                                        <span class="absolute inset-y-0 left-0 pl-2 flex items-center text-slate-500 text-xs">$</span>
-                                        <input type="number" wire:model.live="items.{{ $index }}.unit_price" step="0.01" min="0" class="w-full text-right pl-6 rounded-lg bg-slate-900/50 border-white/10 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-1">
+                                        <span class="absolute inset-y-0 left-0 pl-2 flex items-center text-slate-500 text-xs">{{ \App\Models\Setting::get('currency_symbol', '$') }}</span>
+                                        <input type="number" wire:model.live="items.{{ $index }}.unit_price" step="0.01" min="0" class="w-full text-right pl-6 rounded-lg bg-white/5 border-white/10 text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-1 placeholder-slate-500">
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 align-top text-right font-medium text-white pt-5">
-                                    ${{ number_format((floatval($items[$index]['quantity']) * floatval($items[$index]['unit_price'])), 2) }}
+                                    {{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format((floatval($items[$index]['quantity']) * floatval($items[$index]['unit_price'])), 2) }}
                                 </td>
                                 <td class="px-6 py-4 align-top text-center pt-5">
                                     <button type="button" wire:click="removeItem({{ $index }})" class="text-slate-500 hover:text-rose-500 transition-colors opacity-0 group-hover:opacity-100">
@@ -251,7 +251,7 @@
                 <div class="glass rounded-xl p-6 space-y-4">
                     <div class="flex justify-between items-center text-sm">
                         <span class="text-slate-400">Subtotal</span>
-                        <span class="font-medium text-white text-base">${{ number_format($this->calculateTotal() / (1 + ($tax_rate/100)) + $discount_value, 2) }}</span> 
+                        <span class="font-medium text-white text-base">{{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($this->calculateTotal() / (1 + ($tax_rate/100)) + $discount_value, 2) }}</span> 
                         <!-- Simplification for display, logic handled in PHP -->
                     </div>
 
@@ -259,21 +259,21 @@
                         <div class="flex items-center gap-2">
                             <span class="text-slate-400">Discount</span>
                             <select wire:model.live="discount_type" class="text-xs border-none bg-slate-800 text-white rounded focus:ring-0 py-0.5 pl-2 pr-6 cursor-pointer">
-                                <option value="fixed">$</option>
+                                <option value="fixed">{{ \App\Models\Setting::get('currency_symbol', '$') }}</option>
                                 <option value="percent">%</option>
                             </select>
                         </div>
-                        <input type="number" wire:model.live="discount_value" class="w-24 text-right rounded bg-slate-800 border-white/10 text-white text-sm py-1 focus:ring-indigo-500 focus:border-indigo-500">
+                        <input type="number" wire:model.live="discount_value" class="w-24 text-right rounded bg-white/5 border-white/10 text-white text-sm py-1 focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
 
                     <div class="flex justify-between items-center text-sm pt-2 border-b border-white/10 pb-4">
                         <span class="text-slate-400">Tax Rate (%)</span>
-                        <input type="number" wire:model.live="tax_rate" class="w-24 text-right rounded bg-slate-800 border-white/10 text-white text-sm py-1 focus:ring-indigo-500 focus:border-indigo-500">
+                        <input type="number" wire:model.live="tax_rate" class="w-24 text-right rounded bg-white/5 border-white/10 text-white text-sm py-1 focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
 
                     <div class="flex justify-between items-center pt-2">
                         <span class="text-lg font-bold text-white">Total</span>
-                        <span class="text-2xl font-bold text-indigo-400">${{ number_format($total, 2) }}</span>
+                        <span class="text-2xl font-bold text-indigo-400">{{ \App\Models\Setting::get('currency_symbol', '$') }}{{ number_format($total, 2) }}</span>
                     </div>
                 </div>
             </div>
